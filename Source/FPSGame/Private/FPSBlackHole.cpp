@@ -47,7 +47,7 @@ void AFPSBlackHole::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Find all overlapping components that canc ollide and may be physically simulating.
+	// Find all overlapping components that can collide and may be physically simulating.
 	TArray<UPrimitiveComponent*> OverlappingComps;
 	OuterSphereComponent->GetOverlappingComponents(OverlappingComps);
 
