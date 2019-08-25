@@ -8,6 +8,14 @@
 
 class UPawnSensingComponent;
 
+UENUM(BlueprintType)
+enum class EAIState : uint8
+{
+	Idle,
+	Suspicious,
+	Alerted
+};
+
 UCLASS()
 class FPSGAME_API AFPSAIGuard : public ACharacter
 {
@@ -32,10 +40,38 @@ protected:
 
 	FRotator OriginalRotation;
 
+	UFUNCTION()
 	void ResetOrientation();
+
+	FTimerHandle TimerHandle_ResetOrientation;
+
+	EAIState GuardState;
+
+	void SetGuardState(EAIState NewState);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "AI")
+	void OnStateChanged(EAIState NewState);
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+
+	// CHALLENGE CODE
+
+	/* Let the guard go on patrol */
+	UPROPERTY(EditInstanceOnly, Category = "AI")
+	bool bPatrol;
+
+	/* Array of Patrol Points */
+	UPROPERTY(EditInstanceOnly, Category = "AI", meta = (EditCondition = "bPatrol"))
+	TArray<AActor*> PatrolPoints;
+
+	// The current point the actor is either moving to or standing at
+	AActor* CurrentPatrolPoint;
+
+	int32 PatrolIndex = 0;
+
+	void MoveToNextPatrolPoint();
 };
